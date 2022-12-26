@@ -20,22 +20,32 @@ function createGalleryMarkup(galleryItems) {
 }
 gallery.insertAdjacentHTML("beforeend", markup);
 
-const galleryLink = document.querySelector('.gallery__link');
+gallery.addEventListener('click', onOpenModal);
 
-galleryLink.addEventListener('click', onClickShowModal);
+function onOpenModal(event) {
+  event.preventDefault();
+  
+  if (event.target.nodeName !== "IMG") {
+    return;
+  }
+  const instance = basicLightbox.create(
+    `<img src="${event.target.dataset.source}" "width="800" height="600"/>`, {
+    onShow: () => {
+      window.addEventListener('keydown', onEscKeyPress);
+    },
+      onClose: () => {
+      window.removeEventListener('keydown', onEscKeyPress);
+                 }
+    },
+  );
+  instance.show();
 
-function onClickShowModal(event) {
-    event.preventDefault();
-    if (event.target.nodeName !== "IMG") {
-        return;
+  function onEscKeyPress(event) {
+    if (event.code === "Escape") {
+      instance.close();
     }
-      const instance = basicLightbox.create(
-        `<img src="${event.target.dataset.source}" />`);
-
-    instance.show()
+  }
 }
-
-
 
 
 // console.log(basicLightbox);
