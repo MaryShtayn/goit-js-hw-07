@@ -31,7 +31,7 @@ function onOpenModal(event) {
   const instance = basicLightbox.create(
     `<img src="${event.target.dataset.source}" "width="800" height="600"/>`, {
     onShow: () => {
-      window.addEventListener('keydown', onEscKeyPress);
+      window.addEventListener('keydown', onEscKeyPress.bind(instance));
     },
       onClose: () => {
       window.removeEventListener('keydown', onEscKeyPress);
@@ -40,13 +40,12 @@ function onOpenModal(event) {
   );
   instance.show();
 
-  function onEscKeyPress(event) {
+ }
+ function onEscKeyPress(event) {
     if (event.code === "Escape") {
-      instance.close();
+      this.close();
     }
   }
-}
-
 
 // console.log(basicLightbox);
 // console.log(galleryItems);
